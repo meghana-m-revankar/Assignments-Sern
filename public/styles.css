@@ -31,44 +31,7 @@ header {
   padding: var(--base-spacing) calc(var(--base-spacing) * 3);
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
-nav .logo {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 10px 20px;
-  background-color: var(--light--color);
-  color: var(--light-text--color);
-  border-radius: 5px;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-
-nav ul li {
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.hamburger span {
-  height: 3px;
-  width: 25px;
-  margin: 4px 0;
-  border-radius: 2px;
-}
 
 main {
   padding: 40px;
@@ -81,28 +44,12 @@ main {
   gap: 10px;
   padding: var(--base-spacing);
 }
-.info {
-  flex-direction: row-reverse;
-}
-
-.secondryflex-section {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-.left-content,
-.right-content {
+.form-content {
   flex: 1;
 }
 
-.left-content {
-  max-width: 30%;
-  margin-bottom: 40px;
-}
 
-.right-content {
+.form-content {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -114,72 +61,25 @@ h1
 {
     text-align: center;
 }
-
-.right-content img {
-  max-width: 100%;
-  width: 80%;
-  height: auto;
-  object-fit: cover;
-}
-
-.imglogo {
-  max-width: 100%;
-  height: auto;
-  width: 20%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 50%;
-  margin: 0 20%;
-}
-
-.intro {
-  font-weight: bold;
-  font-size: 60px;
-  margin-bottom: 10px;
-  color: var(--dark-text--color);
-}
-
-.sub {
-  font-size: 30px;
-  font-weight: 700;
-}
-
-.secondryintro {
-  font-size: 35px;
-  font-weight: 700;
-}
-
-.subsecondryintro {
-  font-size: 25px;
-  font-weight: 650;
-}
-
-.cta {
+.button-container {
   display: flex;
-  gap: 20px;
-  align-items: center;
+  justify-content: center; 
+  align-items: center;            
 }
 
-.btn {
-  padding: 10px 40px;
-  background-color: var(--primary-color);
-  color: var(--light-text--color);
-  border: none;
+.btn{
   border-radius: 5px;
+  border: none;
+  width: 50%;
+  height: 50px;
+  padding: 10px;
   font-weight: bold;
-  cursor: pointer;
 }
-
 .submit {
   background-color: var(--primary-color);
   color: var(--light--color);
 }
 
-.text-link {
-  font-weight: bold;
-  color: var(--dark-text--color);
-  text-decoration: underline;
-}
 
 form {
   box-sizing: border-box;
@@ -257,61 +157,17 @@ input[type="submit"] {
   min-width: 300px; /* Or another value that fits your design */
 }
 
-  nav ul {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 20px;
-    left: 10px;
-    width: 100%;
-    text-align: center;
-  }
-  header {
-    background-color: var(--bck-clr);
-  }
-
-  nav ul.active {
-    display: flex;
-  }
-
-  .hamburger {
-    display: flex;
-    font-weight: bold;
-  }
 
   .flex-section,
   .info {
     flex-direction: column-reverse;
     padding: var(--base-spacing);
   }
-
-  .left-content,
-  .right-content,
-  .secondry-right-content,
-  .secondry-left-content {
+  .form-content {
     max-width: 100%;
   }
 
-  .intro {
-    font-size: 40px;
-  }
-
-  .sub {
-    font-size: 25px;
-  }
-
-  .right-content img,
-  .secondry-left-content img {
-    width: 100%;
-  }
-
-  /* Centering .imglogo */
-  .imglogo {
-    width: 30%;
-    margin: 20px auto; /* Center the image horizontally */
-    display: block; /* Ensure it's treated as a block element */
-  }
-
+ 
   form {
     width: 100%;
   }
@@ -325,10 +181,6 @@ input[type="submit"] {
     margin-bottom: 10px;
   }
 
-  .cta {
-    display: flex;
-    flex-direction: column;
-  }
 }
 
 /* Tablet Devices (600px to 1199px) */
@@ -337,13 +189,6 @@ input[type="submit"] {
   min-width: 300px; /* Or another value that fits your design */
 }
 
-  nav ul {
-    flex-direction: row;
-    gap: 15px;
-  }
-  header {
-    background-color: var(--bck-clr);
-  }
 
   .flex-section,
   .info {
@@ -351,31 +196,9 @@ input[type="submit"] {
     padding: var(--base-spacing);
   }
 
-  .left-content,
-  .right-content,
-  .secondry-right-content,
-  .secondry-left-content {
+
+  .form-content {
     max-width: 100%;
-  }
-
-  .intro {
-    font-size: 50px;
-  }
-
-  .sub {
-    font-size: 28px;
-  }
-
-  .right-content img,
-  .secondry-left-content img {
-    width: 90%;
-  }
-
-  /* Centering .imglogo */
-  .imglogo {
-    width: 25%;
-    margin: 20px auto; /* Center the image horizontally */
-    display: block; /* Ensure it's treated as a block element */
   }
 
   form {
