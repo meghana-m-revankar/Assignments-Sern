@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (response.ok) {
                     registerForm.reset();
-                    setTimeout(() => window.location.href = '/login', 2000);
+                    setTimeout(() => window.location.reload(), 500);
                 }
             } catch (error) {
                 registerMessageElement.textContent = 'Error: ' + error.message;
@@ -56,18 +56,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(loginData),
+                    body: JSON.stringify(loginData), // Use loginData here
                 });
 
                 const result = await response.json();
 
                 if (response.ok) {
+                    // Store the token in localStorage
                     localStorage.setItem('token', result.token);
                     loginMessageElement.textContent = 'Login successful';
                     loginMessageElement.style.color = 'green';
 
-                    // Fetch protected content
-                    fetchProtectedContent();
+                    // Redirect to the protected page
+                    window.location.href = '/protected.html'; // Adjust path if necessary
                 } else {
                     loginMessageElement.textContent = result.message;
                     loginMessageElement.style.color = 'red';
@@ -78,6 +79,42 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Function to fetch protected content
+    async function fetchProtectedContent() {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            // Redirect to login if token is missing
+            window.location.href = 'index.html'; // Adjust path if necessary
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/protected', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Handle successful protected content response
+                console.log(data.message);
+            } else {
+                // Handle errors (like invalid token)
+                console.error(data.message);
+                // Optionally redirect to login if token is invalid
+                window.location.href = 'index.html'; // Adjust path if necessary
+            }
+        } catch (error) {
+            console.error('Error fetching protected content:', error);
+        }
+    }
+
 
     // Fetch protected content
     async function fetchProtectedContent() {

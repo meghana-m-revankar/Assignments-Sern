@@ -1,11 +1,13 @@
 const express = require("express");
-const mysql = require('mysql');
-const cors = require('cors');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); // JWT
-const app = express();
+const mysql = require("mysql");
+const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const path = require("path");
+const app = express();
 const port = process.env.PORT || 5000;
+require("dotenv").config();
+
 app.use(express.json());
 app.use(cors());
 
@@ -15,38 +17,66 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Connect to database
 const con = mysql.createConnection({
-    user: "root",
-    host: "localhost",
-    password: "",
-    database: "signup"
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+});
+
+// Check database connection
+con.connect((err) => {
+    if (err) {
+        console.error("Database connection failed: " + err.stack);
+        return;
+    }
+    console.log("Connected to database.");
 });
 
 // Register
-app.post('/register', async (req, res) => {
-    const email = req.body.email;
-    const username = req.body.username;
-    const password = req.body.password;
+app.post("/register", async (req, res) => {
+    const { email, username, password } = req.body;
+
+    // Validate input data
+    if (!email || !username || !password) {
+        return res.status(400).send({ message: "All fields are required." });
+    }
+
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        con.query("INSERT INTO users(email, username, password) VALUES(?, ?, ?)", [email, username, hashedPassword],
-            (err, result) => {
-                if (err) {
-                    console.error("Database error:", err); // Log the error for debugging
-                    return res.status(500).send({ message: "Database error: " + err.message });
-                }
-                res.status(201).send({ message: "User registered successfully" });
+        // Check if the user already exists
+        con.query("SELECT * FROM users WHERE email = ? OR username = ?", [email, username], async (err, result) => {
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).send({ message: "Database error: " + err.message });
             }
-        );
+
+            // If result is not empty, user already exists
+            if (result.length > 0) {
+                return res.status(409).send({ message: "User already exists with this email or username." });
+            }
+
+            // Hash the password and insert the new user
+            const hashedPassword = await bcrypt.hash(password, 10);
+            con.query(
+                "INSERT INTO users(email, username, password) VALUES(?, ?, ?)",
+                [email, username, hashedPassword],
+                (err, result) => {
+                    if (err) {
+                        console.error("Database error:", err);
+                        return res.status(500).send({ message: "Database error: " + err.message });
+                    }
+                    res.status(201).send({ message: "User registered successfully" });
+                }
+            );
+        });
     } catch (error) {
-        console.error("Server error:", error); // Log the error for debugging
+        console.error("Server error:", error);
         res.status(500).send({ message: "Server error: " + error.message });
     }
 });
 
 // Login
-app.post('/login', (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
+app.post("/login", (req, res) => {
+    const { username, password } = req.body;
 
     // Query the database for the user
     con.query("SELECT * FROM users WHERE username=?", [username], async (err, result) => {
@@ -66,7 +96,7 @@ app.post('/login', (req, res) => {
 
         // Generate the token
         const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, {
-            expiresIn: "1h"
+            expiresIn: "1h",
         });
 
         // Send back the token in the response
@@ -96,6 +126,6 @@ app.get("/", (req, res) => {
 });
 
 // Start the server
-app.listen(5000, () => {
-    console.log('Server Started on http://localhost:5000');
+app.listen(port, () => {
+    console.log(`Server started on http://localhost:${port}`);
 });
