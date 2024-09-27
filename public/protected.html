@@ -1,0 +1,43 @@
+<!-- protected.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welocom Page</title>
+</head>
+<body>
+    <h1>Page Content</h1>
+    <div id="message"></div>
+    
+    <script>
+        const token = localStorage.getItem('token');
+
+        // Check if token exists
+        if (!token) {
+            document.getElementById('message').innerText = 'Access denied. Please log in.';
+            window.location.href = 'index.html'; // Redirect to the login page
+        } else {
+            fetch('http://localhost:5000/protected', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    document.getElementById('message').innerText = data.message; // Display success message
+                } else {
+                    document.getElementById('message').innerText = 'Failed to retrieve protected data.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('message').innerText = 'Error fetching protected data.';
+            });
+        }
+    </script>
+</body>
+</html>
