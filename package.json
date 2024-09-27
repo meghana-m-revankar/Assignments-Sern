@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "dev": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "start": "node public/server.js",
+    "build": "parcel build index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
