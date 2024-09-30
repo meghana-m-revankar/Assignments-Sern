@@ -16,7 +16,7 @@ const SECRET_KEY = "bearer";
 app.use(express.static(path.join(__dirname, "public")));
 
 // Connect to database
-const con = mysql.createConnection({
+const connection = mysql.createConnection({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     password: process.env.DB_PASSWORD,
@@ -24,7 +24,7 @@ const con = mysql.createConnection({
 });
 
 // Check database connection
-con.connect((err) => {
+connection.connect((err) => {
     if (err) {
         console.error("Database connection failed: " + err.stack);
         return;
